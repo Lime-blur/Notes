@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Notes App</string>
+    <string name="tab_text_1">List</string>
+    <string name="tab_text_2">Creator</string>
+    <string name="note_name">Note name</string>
+    <string name="note_text">Note text</string>
+    <string name="create_note">createNote</string>
+    <string name="date">Date</string>
+    <string name="time">Time</string>
+    <string name="x">X</string>
+</resources>
