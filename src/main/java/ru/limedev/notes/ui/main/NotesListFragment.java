@@ -16,6 +16,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -30,7 +32,7 @@ public class NotesListFragment extends Fragment {
 
     private View fragmentView;
     private RecyclerView recyclerView;
-    private List<NotesListItem> listItems;
+    private final List<NotesListItem> listItems = Collections.synchronizedList(new ArrayList<>());
     private SwipeRefreshLayout swipeRefreshLayout;
 
     @Nullable
@@ -39,7 +41,6 @@ public class NotesListFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notes_list, container, false);
         fragmentView = view;
-        listItems = new ArrayList<>();
         return view;
     }
 
@@ -57,7 +58,10 @@ public class NotesListFragment extends Fragment {
         Thread loadValuesThread = new Thread(() -> {
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
-                listItems = NoteDbManager.loadValuesFromDb(listItems);
+                synchronized (listItems) {
+                    listItems.clear();
+                    NoteDbManager.loadValuesFromDb(listItems);
+                }
                 handler.post(new Thread(this::updateUI));
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -71,9 +75,13 @@ public class NotesListFragment extends Fragment {
         Thread removeValuesThread = new Thread(() -> {
             boolean removed = NoteDbManager.removeValuesFromDb(itemId);
             if (removed) {
-                for (NotesListItem item : listItems) {
-                    if (item.getId() == itemId) {
-                        listItems.remove(item);
+                synchronized (listItems) {
+                    Iterator<NotesListItem> it = listItems.iterator();
+                    while (it.hasNext()) {
+                        NotesListItem s = it.next();
+                        if (s.getId() == itemId) {
+                            it.remove();
+                        }
                     }
                 }
                 handler.post(new Thread(() -> {

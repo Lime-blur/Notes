@@ -6,12 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
-import androidx.annotation.NonNull;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ru.limedev.notes.model.beans.NotesListItem;
+
 import static ru.limedev.notes.model.db.NoteReaderContract.NoteEntry;
 
 public class NoteDbManager {
@@ -48,7 +47,7 @@ public class NoteDbManager {
         return db.insert(NoteEntry.TABLE_NAME, null, values);
     }
 
-    public static synchronized @NonNull List<NotesListItem> loadValuesFromDb(
+    public static synchronized void loadValuesFromDb(
             List<NotesListItem> listItems) {
         if (listItems == null) {
             listItems = new ArrayList<>();
@@ -82,7 +81,6 @@ public class NoteDbManager {
             listItems.add(new NotesListItem(itemId, itemName, itemText, itemDate, itemTime));
         }
         cursor.close();
-        return listItems;
     }
 
     public static synchronized boolean removeValuesFromDb(long id) {
