@@ -62,7 +62,7 @@ public class NotesListFragment extends Fragment {
                     listItems.clear();
                     NoteDbManager.loadValuesFromDb(listItems);
                 }
-                handler.post(new Thread(this::updateUI));
+                handler.post(this::updateUI);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -84,11 +84,11 @@ public class NotesListFragment extends Fragment {
                         }
                     }
                 }
-                handler.post(new Thread(() -> {
+                handler.post(() -> {
                     updateUI();
                     Snackbar.make(fragmentView, REMOVED, Snackbar.LENGTH_LONG)
                             .setAction(ACTION, null).show();
-                }));
+                });
             }
         });
         removeValuesThread.start();

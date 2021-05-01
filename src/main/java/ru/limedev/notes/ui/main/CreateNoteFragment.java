@@ -79,9 +79,9 @@ public class CreateNoteFragment extends Fragment implements View.OnClickListener
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
                 if (NoteDbManager.insertValuesToDb(name, text, date, time) != DB_RETURN_ERROR) {
-                    handler.post(new Thread(() -> showSnackbar(ADDED)));
+                    handler.post(() -> showSnackbar(ADDED));
                 } else {
-                    handler.post(new Thread(() -> showSnackbar(ERROR_DURING_INSERT)));
+                    handler.post(() -> showSnackbar(ERROR_DURING_INSERT));
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
