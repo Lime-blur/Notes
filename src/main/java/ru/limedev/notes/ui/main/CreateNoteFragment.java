@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import ru.limedev.notes.R;
 import ru.limedev.notes.model.db.NoteDbManager;
-import ru.limedev.notes.model.exceptions.ParseStringException;
+import ru.limedev.notes.model.exceptions.ParseDateException;
 import ru.limedev.notes.model.pojo.Datetime;
 
 import static ru.limedev.notes.model.Constants.ACTION;
@@ -28,6 +28,7 @@ import static ru.limedev.notes.model.Constants.DB_RETURN_ERROR;
 import static ru.limedev.notes.model.Constants.ERROR_DURING_INSERT;
 import static ru.limedev.notes.model.Constants.FILL_FIELDS;
 import static ru.limedev.notes.model.Constants.INCORRECT_DATETIME;
+import static ru.limedev.notes.model.Constants.INCORRECT_FUTURE_DATETIME;
 import static ru.limedev.notes.model.Utilities.checkStrings;
 
 public class CreateNoteFragment extends Fragment implements View.OnClickListener {
@@ -59,13 +60,21 @@ public class CreateNoteFragment extends Fragment implements View.OnClickListener
             String time = getTextFromTextInputLayout(R.id.createNoteFieldTime);
             if (fragmentView != null) {
                 try {
-                    Datetime datetime = new Datetime(date, time);
                     if (checkStrings(name, text)) {
-                        insertValues(name, text, datetime.getDate(), datetime.getTime());
+                        if (checkStrings(date, time)) {
+                            Datetime datetime = new Datetime(date, time);
+                            if (datetime.isFutureDatetime()) {
+                                insertValues(name, text, datetime.getStringDate(), datetime.getStringTime());
+                            } else {
+                                showSnackbar(INCORRECT_FUTURE_DATETIME);
+                            }
+                        } else {
+                            insertValues(name, text, null, null);
+                        }
                     } else {
                         showSnackbar(FILL_FIELDS);
                     }
-                } catch (ParseStringException e) {
+                } catch (ParseDateException e) {
                     showSnackbar(INCORRECT_DATETIME);
                 }
             }

@@ -39,7 +39,9 @@ public abstract class NotesRecyclerViewAdapter extends RecyclerView.Adapter<Note
         NotesListItem listItem = listItems.get(position);
         holder.holderFieldName.setText(listItem.getName());
         holder.holderFieldText.setText(listItem.getText());
-        holder.holderFieldDatetime.setText(listItem.getDatetime());
+        if (listItem.getDate() != null && listItem.getTime() != null) {
+            holder.holderFieldDatetime.setText(listItem.getDatetime());
+        }
         holder.holderRemoveButton.setOnClickListener(v -> onRemoveItem(listItem.getId()));
     }
 

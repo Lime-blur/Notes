@@ -10,6 +10,12 @@ public class NotesListItem {
     private String date;
     private String time;
 
+    public NotesListItem(long id, String name, String text) {
+        this.id = id;
+        this.name = name;
+        this.text = text;
+    }
+
     public NotesListItem(long id, String name, String text, String date, String time) {
         this.id = id;
         this.name = name;
