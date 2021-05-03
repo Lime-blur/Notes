@@ -6,7 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import ru.limedev.notes.model.exceptions.ParseDateException;
+import ru.limedev.notes.model.exceptions.ParseDataException;
 
 import static ru.limedev.notes.model.Utilities.checkStrings;
 
@@ -28,20 +28,20 @@ public class Datetime {
     private static final int NOW = 0;
     private static final int AFTER = 1;
 
-    public Datetime(String date, String time) throws ParseDateException {
+    public Datetime(String date, String time) throws ParseDataException {
         if (checkStrings(date, time)) {
             try {
                 this.date = DATE_FORMAT.parse(date);
                 this.time = TIME_FORMAT.parse(time);
             } catch (ParseException ex) {
-                throw new ParseDateException();
+                throw new ParseDataException();
             }
         } else {
-            throw new ParseDateException();
+            throw new ParseDataException();
         }
     }
 
-    public int isFutureDate() throws ParseDateException {
+    public int isFutureDate() throws ParseDataException {
         try {
             Date current = DATE_FORMAT.parse(DATE_FORMAT.format(new Date()));
             if (getDate().equals(current)) {
@@ -52,11 +52,11 @@ public class Datetime {
                 return BEFORE;
             }
         } catch (ParseException ex) {
-            throw new ParseDateException();
+            throw new ParseDataException();
         }
     }
 
-    public int isFutureTime() throws ParseDateException {
+    public int isFutureTime() throws ParseDataException {
         try {
             Date current = TIME_FORMAT.parse(TIME_FORMAT.format(new Date()));
             if (getTime().equals(current)) {
@@ -67,11 +67,11 @@ public class Datetime {
                 return BEFORE;
             }
         } catch (ParseException ex) {
-            throw new ParseDateException();
+            throw new ParseDataException();
         }
     }
 
-    public boolean isFutureDatetime() throws ParseDateException {
+    public boolean isFutureDatetime() throws ParseDataException {
         if (isFutureDate() == AFTER) {
             return true;
         } else if (isFutureDate() == NOW) {
@@ -89,15 +89,19 @@ public class Datetime {
         return date;
     }
 
-    public Calendar getCalendarDatetime() throws ParseDateException {
+    public Calendar getCalendarDatetime() throws ParseDataException {
         try {
             String datetimeString = DB_DATE_FORMAT.format(date) + " " + TIME_FORMAT.format(time) + ":00";
             Date datetime = DATETIME_FORMAT.parse(datetimeString);
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTime(datetime);
-            return calendar;
+            if (datetime != null) {
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(datetime);
+                return calendar;
+            } else {
+                throw new ParseDataException();
+            }
         } catch (ParseException ex) {
-            throw new ParseDateException();
+            throw new ParseDataException();
         }
     }
 

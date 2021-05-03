@@ -9,5 +9,9 @@ public final class Constants {
     public static final String INCORRECT_DATETIME = "Incorrect date or time format!";
     public static final String INCORRECT_FUTURE_DATETIME = "Date and time must be in the future!";
 
+    public static final String NOTIFICATION_EXTRA_ID = "NOTES_EXTRA_ID";
+    public static final String NOTIFICATION_EXTRA_NAME = "NOTES_EXTRA_NAME";
+    public static final String NOTIFICATION_EXTRA_TEXT = "NOTES_EXTRA_TEXT";
+
     public static final long DB_RETURN_ERROR = -1;
 }

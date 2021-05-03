@@ -5,10 +5,12 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -18,7 +20,7 @@ import java.util.concurrent.TimeUnit;
 
 import ru.limedev.notes.R;
 import ru.limedev.notes.model.db.NoteDbManager;
-import ru.limedev.notes.model.exceptions.ParseDateException;
+import ru.limedev.notes.model.exceptions.ParseDataException;
 import ru.limedev.notes.model.pojo.Notification;
 
 import static ru.limedev.notes.model.Constants.ADDED;
@@ -33,6 +35,8 @@ import static ru.limedev.notes.model.Utilities.showSnackbar;
 public class CreateNoteFragment extends Fragment implements View.OnClickListener {
 
     private View fragmentView;
+
+    private static final int DATE_NOTIFICATION_ID = 0;
 
     @Nullable
     @Override
@@ -60,7 +64,8 @@ public class CreateNoteFragment extends Fragment implements View.OnClickListener
             try {
                 if (checkStrings(name, text)) {
                     if (checkStrings(date, time)) {
-                        Notification notification = new Notification(date, time);
+                        Notification notification = new Notification(date, time,
+                                DATE_NOTIFICATION_ID, name, text);
                         if (notification.isFutureDatetime()) {
                             notification.createNotification(getContext());
                             insertValues(name, text, notification.getStringDate(),
@@ -74,7 +79,7 @@ public class CreateNoteFragment extends Fragment implements View.OnClickListener
                 } else {
                     showSnackbar(fragmentView, FILL_FIELDS);
                 }
-            } catch (ParseDateException e) {
+            } catch (ParseDataException e) {
                 showSnackbar(fragmentView, INCORRECT_DATETIME);
             }
         }
@@ -99,17 +104,27 @@ public class CreateNoteFragment extends Fragment implements View.OnClickListener
     }
 
     private void restartFragment() {
-        Fragment currentFragment = getFragmentManager().findFragmentById(this.getId());
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.detach(currentFragment);
-        fragmentTransaction.attach(currentFragment);
-        fragmentTransaction.commit();
+        FragmentManager fragmentManager = getFragmentManager();
+        if (fragmentManager != null) {
+            Fragment currentFragment = getFragmentManager().findFragmentById(this.getId());
+            if (currentFragment != null) {
+                FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+                fragmentTransaction.detach(currentFragment);
+                fragmentTransaction.attach(currentFragment);
+                fragmentTransaction.commit();
+            }
+        }
     }
 
     private @Nullable String getTextFromTextInputLayout(int textInputLayoutId) {
         TextInputLayout textInputLayout = fragmentView.findViewById(textInputLayoutId);
         if (textInputLayout != null) {
-            return textInputLayout.getEditText().getText().toString();
+            EditText editText = textInputLayout.getEditText();
+            if (editText != null) {
+                return editText.getText().toString();
+            } else {
+                return null;
+            }
         } else {
             return null;
         }

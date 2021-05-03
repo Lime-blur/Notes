@@ -2,25 +2,25 @@ package ru.limedev.notes.model.exceptions;
 
 import androidx.annotation.NonNull;
 
-public class ParseDateException extends Exception {
+public class ParseDataException extends Exception {
 
     private String reason;
 
-    public ParseDateException() {
+    public ParseDataException() {
         super();
     }
 
-    public ParseDateException(Exception exception, String reason) {
+    public ParseDataException(Exception exception, String reason) {
         super(exception);
         this.reason = reason;
     }
 
-    public ParseDateException(String cause, String reason) {
+    public ParseDataException(String cause, String reason) {
         super(cause);
         this.reason = reason;
     }
 
-    public ParseDateException(String reason) {
+    public ParseDataException(String reason) {
         super();
         this.reason = reason;
     }
@@ -31,6 +31,6 @@ public class ParseDateException extends Exception {
         if (message != null && reason != null) {
             return getMessage() + ": " + reason;
         }
-        return "Error during parse date!";
+        return "Error during parse data!";
     }
 }
