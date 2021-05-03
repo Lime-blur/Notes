@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.concurrent.TimeUnit;
@@ -20,9 +19,8 @@ import java.util.concurrent.TimeUnit;
 import ru.limedev.notes.R;
 import ru.limedev.notes.model.db.NoteDbManager;
 import ru.limedev.notes.model.exceptions.ParseDateException;
-import ru.limedev.notes.model.pojo.Datetime;
+import ru.limedev.notes.model.pojo.Notification;
 
-import static ru.limedev.notes.model.Constants.ACTION;
 import static ru.limedev.notes.model.Constants.ADDED;
 import static ru.limedev.notes.model.Constants.DB_RETURN_ERROR;
 import static ru.limedev.notes.model.Constants.ERROR_DURING_INSERT;
@@ -30,6 +28,7 @@ import static ru.limedev.notes.model.Constants.FILL_FIELDS;
 import static ru.limedev.notes.model.Constants.INCORRECT_DATETIME;
 import static ru.limedev.notes.model.Constants.INCORRECT_FUTURE_DATETIME;
 import static ru.limedev.notes.model.Utilities.checkStrings;
+import static ru.limedev.notes.model.Utilities.showSnackbar;
 
 public class CreateNoteFragment extends Fragment implements View.OnClickListener {
 
@@ -58,25 +57,25 @@ public class CreateNoteFragment extends Fragment implements View.OnClickListener
             String text = getTextFromTextInputLayout(R.id.createNoteFieldText);
             String date = getTextFromTextInputLayout(R.id.createNoteFieldDate);
             String time = getTextFromTextInputLayout(R.id.createNoteFieldTime);
-            if (fragmentView != null) {
-                try {
-                    if (checkStrings(name, text)) {
-                        if (checkStrings(date, time)) {
-                            Datetime datetime = new Datetime(date, time);
-                            if (datetime.isFutureDatetime()) {
-                                insertValues(name, text, datetime.getStringDate(), datetime.getStringTime());
-                            } else {
-                                showSnackbar(INCORRECT_FUTURE_DATETIME);
-                            }
+            try {
+                if (checkStrings(name, text)) {
+                    if (checkStrings(date, time)) {
+                        Notification notification = new Notification(date, time);
+                        if (notification.isFutureDatetime()) {
+                            notification.createNotification(getContext());
+                            insertValues(name, text, notification.getStringDate(),
+                                    notification.getStringTime());
                         } else {
-                            insertValues(name, text, null, null);
+                            showSnackbar(fragmentView, INCORRECT_FUTURE_DATETIME);
                         }
                     } else {
-                        showSnackbar(FILL_FIELDS);
+                        insertValues(name, text, null, null);
                     }
-                } catch (ParseDateException e) {
-                    showSnackbar(INCORRECT_DATETIME);
+                } else {
+                    showSnackbar(fragmentView, FILL_FIELDS);
                 }
+            } catch (ParseDateException e) {
+                showSnackbar(fragmentView, INCORRECT_DATETIME);
             }
         }
     }
@@ -88,19 +87,15 @@ public class CreateNoteFragment extends Fragment implements View.OnClickListener
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
                 if (NoteDbManager.insertValuesToDb(name, text, date, time) != DB_RETURN_ERROR) {
-                    handler.post(() -> showSnackbar(ADDED));
+                    handler.post(() -> showSnackbar(fragmentView, ADDED));
                 } else {
-                    handler.post(() -> showSnackbar(ERROR_DURING_INSERT));
+                    handler.post(() -> showSnackbar(fragmentView, ERROR_DURING_INSERT));
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         });
         insertValuesThread.start();
-    }
-
-    private void showSnackbar(String text) {
-        Snackbar.make(fragmentView, text, Snackbar.LENGTH_LONG).setAction(ACTION, null).show();
     }
 
     private void restartFragment() {

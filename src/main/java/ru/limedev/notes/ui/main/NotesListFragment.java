@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
@@ -25,8 +23,8 @@ import ru.limedev.notes.R;
 import ru.limedev.notes.model.beans.NotesListItem;
 import ru.limedev.notes.model.db.NoteDbManager;
 
-import static ru.limedev.notes.model.Constants.ACTION;
 import static ru.limedev.notes.model.Constants.REMOVED;
+import static ru.limedev.notes.model.Utilities.showSnackbar;
 
 public class NotesListFragment extends Fragment {
 
@@ -86,8 +84,7 @@ public class NotesListFragment extends Fragment {
                 }
                 handler.post(() -> {
                     updateUI();
-                    Snackbar.make(fragmentView, REMOVED, Snackbar.LENGTH_LONG)
-                            .setAction(ACTION, null).show();
+                    showSnackbar(fragmentView, REMOVED);
                 });
             }
         });

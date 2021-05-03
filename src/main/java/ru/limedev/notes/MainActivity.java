@@ -8,7 +8,6 @@ import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabLayout;
 
 import ru.limedev.notes.model.db.NoteDbManager;
-import ru.limedev.notes.model.db.NoteReaderDbHelper;
 import ru.limedev.notes.ui.main.SectionsPagerAdapter;
 
 public class MainActivity extends AppCompatActivity {

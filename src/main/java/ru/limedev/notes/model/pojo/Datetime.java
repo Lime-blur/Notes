@@ -2,6 +2,7 @@ package ru.limedev.notes.model.pojo;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -20,6 +21,8 @@ public class Datetime {
             new SimpleDateFormat("HH:mm", Locale.US);
     private static final SimpleDateFormat DB_DATE_FORMAT =
             new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+    private static final SimpleDateFormat DATETIME_FORMAT =
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US);
 
     private static final int BEFORE = -1;
     private static final int NOW = 0;
@@ -84,6 +87,18 @@ public class Datetime {
 
     public Date getDate() {
         return date;
+    }
+
+    public Calendar getCalendarDatetime() throws ParseDateException {
+        try {
+            String datetimeString = DB_DATE_FORMAT.format(date) + " " + TIME_FORMAT.format(time) + ":00";
+            Date datetime = DATETIME_FORMAT.parse(datetimeString);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(datetime);
+            return calendar;
+        } catch (ParseException ex) {
+            throw new ParseDateException();
+        }
     }
 
     public String getStringTime() {

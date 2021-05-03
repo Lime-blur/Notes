@@ -1,5 +1,11 @@
 package ru.limedev.notes.model;
 
+import android.view.View;
+
+import com.google.android.material.snackbar.Snackbar;
+
+import static ru.limedev.notes.model.Constants.ACTION;
+
 public final class Utilities {
 
     public static boolean checkStrings(String... strings) {
@@ -12,5 +18,11 @@ public final class Utilities {
             }
         }
         return result;
+    }
+
+    public static void showSnackbar(View view, String text) {
+        if (view != null) {
+            Snackbar.make(view, text, Snackbar.LENGTH_LONG).setAction(ACTION, null).show();
+        }
     }
 }
