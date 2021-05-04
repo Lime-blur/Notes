@@ -16,7 +16,10 @@ public class NoteReaderDbHelper extends SQLiteOpenHelper {
                     NoteEntry.COLUMN_NAME_NAME + " TEXT," +
                     NoteEntry.COLUMN_NAME_TEXT + " TEXT," +
                     NoteEntry.COLUMN_NAME_DATE + " NUMERIC," +
-                    NoteEntry.COLUMN_NAME_TIME + " NUMERIC)";
+                    NoteEntry.COLUMN_NAME_TIME + " NUMERIC," +
+                    NoteEntry.COLUMN_NAME_NOTIFICATION_ID + " INTEGER," +
+                    NoteEntry.COLUMN_NAME_GEO_LTD + " REAL," +
+                    NoteEntry.COLUMN_NAME_GEO_LGD + " REAL)";
     private static final String SQL_DELETE_ENTRIES =
             "DROP TABLE IF EXISTS " + NoteEntry.TABLE_NAME;
 

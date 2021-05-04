@@ -12,6 +12,9 @@ public class NoteReaderContract {
         public static final String COLUMN_NAME_TEXT = "text";
         public static final String COLUMN_NAME_DATE = "date";
         public static final String COLUMN_NAME_TIME = "time";
+        public static final String COLUMN_NAME_NOTIFICATION_ID = "notification";
+        public static final String COLUMN_NAME_GEO_LTD = "geo_ltd";
+        public static final String COLUMN_NAME_GEO_LGD = "geo_lgd";
     }
 }
 

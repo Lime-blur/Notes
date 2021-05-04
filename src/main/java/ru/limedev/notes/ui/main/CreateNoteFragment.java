@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import java.util.concurrent.TimeUnit;
 
 import ru.limedev.notes.R;
+import ru.limedev.notes.model.ApplicationSettings;
 import ru.limedev.notes.model.db.NoteDbManager;
 import ru.limedev.notes.model.exceptions.ParseDataException;
 import ru.limedev.notes.model.pojo.Notification;
@@ -29,14 +30,14 @@ import static ru.limedev.notes.model.Constants.ERROR_DURING_INSERT;
 import static ru.limedev.notes.model.Constants.FILL_FIELDS;
 import static ru.limedev.notes.model.Constants.INCORRECT_DATETIME;
 import static ru.limedev.notes.model.Constants.INCORRECT_FUTURE_DATETIME;
+import static ru.limedev.notes.model.Constants.NOTIFICATION_SETTINGS_ID;
+import static ru.limedev.notes.model.Constants.UNKNOWN_INT_VALUE;
 import static ru.limedev.notes.model.Utilities.checkStrings;
 import static ru.limedev.notes.model.Utilities.showSnackbar;
 
 public class CreateNoteFragment extends Fragment implements View.OnClickListener {
 
     private View fragmentView;
-
-    private static final int DATE_NOTIFICATION_ID = 0;
 
     @Nullable
     @Override
@@ -64,17 +65,18 @@ public class CreateNoteFragment extends Fragment implements View.OnClickListener
             try {
                 if (checkStrings(name, text)) {
                     if (checkStrings(date, time)) {
-                        Notification notification = new Notification(date, time,
-                                DATE_NOTIFICATION_ID, name, text);
+                        int currentId = ApplicationSettings.loadInt(NOTIFICATION_SETTINGS_ID);
+                        Notification notification = new Notification(date, time, currentId, name, text);
                         if (notification.isFutureDatetime()) {
                             notification.createNotification(getContext());
                             insertValues(name, text, notification.getStringDate(),
-                                    notification.getStringTime());
+                                    notification.getStringTime(), currentId);
+                            ApplicationSettings.saveInt(NOTIFICATION_SETTINGS_ID, ++currentId);
                         } else {
                             showSnackbar(fragmentView, INCORRECT_FUTURE_DATETIME);
                         }
                     } else {
-                        insertValues(name, text, null, null);
+                        insertValues(name, text, null, null, UNKNOWN_INT_VALUE);
                     }
                 } else {
                     showSnackbar(fragmentView, FILL_FIELDS);
@@ -85,13 +87,14 @@ public class CreateNoteFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void insertValues(String name, String text, String date, String time) {
+    private void insertValues(String name, String text, String date, String time, int notificationId) {
         final Handler handler = new Handler();
         restartFragment();
         Thread insertValuesThread = new Thread(() -> {
             try {
                 TimeUnit.MILLISECONDS.sleep(1000);
-                if (NoteDbManager.insertValuesToDb(name, text, date, time) != DB_RETURN_ERROR) {
+                if (NoteDbManager.insertValuesToDb(name, text, date, time,
+                        notificationId, 0, 0) != DB_RETURN_ERROR) {
                     handler.post(() -> showSnackbar(fragmentView, ADDED));
                 } else {
                     handler.post(() -> showSnackbar(fragmentView, ERROR_DURING_INSERT));

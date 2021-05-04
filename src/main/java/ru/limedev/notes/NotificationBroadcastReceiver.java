@@ -6,7 +6,7 @@ import android.content.Intent;
 
 import java.util.zip.DataFormatException;
 
-import ru.limedev.notes.model.pojo.NotificationBuilder;
+import ru.limedev.notes.model.NotificationBuilder;
 
 import static ru.limedev.notes.model.Constants.NOTIFICATION_EXTRA_ID;
 import static ru.limedev.notes.model.Constants.NOTIFICATION_EXTRA_NAME;
@@ -22,7 +22,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
             String notificationText = intent.getStringExtra(NOTIFICATION_EXTRA_TEXT);
             NotificationBuilder notificationBuilder = new NotificationBuilder(context,
                     notificationId, notificationName, notificationText);
-            notificationBuilder.buildPressableNotification(MainActivity.class);
+            notificationBuilder.buildPressableNotification(NoteActivity.class);
         } catch (DataFormatException e) {
             e.printStackTrace();
         }

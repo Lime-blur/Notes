@@ -12,6 +12,10 @@ public final class Constants {
     public static final String NOTIFICATION_EXTRA_ID = "NOTES_EXTRA_ID";
     public static final String NOTIFICATION_EXTRA_NAME = "NOTES_EXTRA_NAME";
     public static final String NOTIFICATION_EXTRA_TEXT = "NOTES_EXTRA_TEXT";
+    public static final String NOTES_EXTRA_NOTES_LIST = "NOTES_EXTRA_NOTES_LIST";
+
+    public static final String NOTIFICATION_SETTINGS_ID = "NOTES_SETTINGS_ID";
 
     public static final long DB_RETURN_ERROR = -1;
+    public static final int UNKNOWN_INT_VALUE = -1;
 }

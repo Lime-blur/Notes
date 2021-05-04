@@ -1,27 +1,29 @@
 package ru.limedev.notes.model.beans;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class NotesListItem {
+public class NotesListItem implements Serializable {
 
     private final long id;
     private String name;
     private String text;
     private String date;
     private String time;
+    private final int notificationId;
+    private double ltd;
+    private double lgd;
 
-    public NotesListItem(long id, String name, String text) {
-        this.id = id;
-        this.name = name;
-        this.text = text;
-    }
-
-    public NotesListItem(long id, String name, String text, String date, String time) {
+    public NotesListItem(long id, String name, String text, String date, String time,
+                         int notificationId, double ltd, double lgd) {
         this.id = id;
         this.name = name;
         this.text = text;
         this.date = date;
         this.time = time;
+        this.notificationId = notificationId;
+        this.ltd = ltd;
+        this.lgd = lgd;
     }
 
     public long getId() {
@@ -60,6 +62,26 @@ public class NotesListItem {
         this.time = time;
     }
 
+    public int getNotificationId() {
+        return notificationId;
+    }
+
+    public double getLtd() {
+        return ltd;
+    }
+
+    public void setLtd(double ltd) {
+        this.ltd = ltd;
+    }
+
+    public double getLgd() {
+        return lgd;
+    }
+
+    public void setLgd(double lgd) {
+        this.lgd = lgd;
+    }
+
     public String getDatetime() {
         return getDate() + " " + getTime();
     }
@@ -74,17 +96,20 @@ public class NotesListItem {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, text, date, time);
+        return Objects.hash(id, name, text, date, time, notificationId, ltd, lgd);
     }
 
     @Override
     public String toString() {
         return "NotesListItem{" +
-                "id='" + id + '\'' +
+                "id=" + id +
                 ", name='" + name + '\'' +
                 ", text='" + text + '\'' +
                 ", date='" + date + '\'' +
                 ", time='" + time + '\'' +
+                ", notificationId=" + notificationId +
+                ", ltd=" + ltd +
+                ", lgd=" + lgd +
                 '}';
     }
 }

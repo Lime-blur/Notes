@@ -1,4 +1,4 @@
-package ru.limedev.notes.model.pojo;
+package ru.limedev.notes.model;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -65,7 +65,7 @@ public class NotificationBuilder {
     public void buildPressableNotification(Class<?> targetActivity) {
         Intent notificationIntent = new Intent(context, targetActivity);
         PendingIntent contentIntent = PendingIntent.getActivity(context,
-                    0, notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                getId(), notificationIntent, PendingIntent.FLAG_CANCEL_CURRENT);
         notificationBuilder.setContentIntent(contentIntent);
         buildNotification();
     }

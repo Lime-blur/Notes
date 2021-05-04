@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 
 import ru.limedev.notes.model.exceptions.ParseDataException;
 
@@ -111,5 +112,27 @@ public class Datetime {
 
     public Date getTime() {
         return time;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Datetime datetime = (Datetime) o;
+        return date.equals(datetime.date) &&
+                time.equals(datetime.time);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(date, time);
+    }
+
+    @Override
+    public String toString() {
+        return "Datetime{" +
+                "date=" + date +
+                ", time=" + time +
+                '}';
     }
 }

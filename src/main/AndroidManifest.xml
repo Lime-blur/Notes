@@ -14,11 +14,16 @@
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/Theme.Notes.NoActionBar">
+            android:theme="@style/Theme.Notes.NoActionBar"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".NoteActivity"
+            android:parentActivityName=".MainActivity">
         </activity>
         <receiver android:name=".NotificationBroadcastReceiver">
         </receiver>

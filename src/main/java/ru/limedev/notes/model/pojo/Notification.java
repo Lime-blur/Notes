@@ -6,6 +6,8 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 
+import java.util.Objects;
+
 import ru.limedev.notes.NotificationBroadcastReceiver;
 import ru.limedev.notes.model.exceptions.ParseDataException;
 
@@ -19,8 +21,6 @@ public class Notification extends Datetime {
     private final int id;
     private final String name;
     private final String text;
-
-    private static final int REQUEST_CODE = 0;
 
     public Notification(String date, String time, int id, String name, String text)
             throws ParseDataException {
@@ -46,15 +46,47 @@ public class Notification extends Datetime {
         return text;
     }
 
+    public static void removeAlarm(Context context, int requestCode) {
+        if (context != null) {
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
+            Intent intent = new Intent(context, NotificationBroadcastReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
+                    requestCode, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+            alarmManager.cancel(pendingIntent);
+        }
+    }
+
     public void createNotification(Context context) throws ParseDataException {
         Intent intent = new Intent(context, NotificationBroadcastReceiver.class);
         intent.putExtra(NOTIFICATION_EXTRA_ID, getId());
         intent.putExtra(NOTIFICATION_EXTRA_NAME, getName());
         intent.putExtra(NOTIFICATION_EXTRA_TEXT, getText());
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-                REQUEST_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                getId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Activity.ALARM_SERVICE);
-        alarmManager.setExact(AlarmManager.RTC_WAKEUP, getCalendarDatetime().getTimeInMillis(),
-                pendingIntent);
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, getCalendarDatetime().getTimeInMillis(), pendingIntent);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Notification that = (Notification) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), id);
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", text='" + text + '\'' +
+                '}';
     }
 }
