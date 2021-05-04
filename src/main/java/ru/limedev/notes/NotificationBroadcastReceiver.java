@@ -22,7 +22,7 @@ public class NotificationBroadcastReceiver extends BroadcastReceiver {
             String notificationText = intent.getStringExtra(NOTIFICATION_EXTRA_TEXT);
             NotificationBuilder notificationBuilder = new NotificationBuilder(context,
                     notificationId, notificationName, notificationText);
-            notificationBuilder.buildPressableNotification(NoteActivity.class);
+            notificationBuilder.buildPressableNotification(MainActivity.class);
         } catch (DataFormatException e) {
             e.printStackTrace();
         }

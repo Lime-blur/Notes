@@ -98,31 +98,27 @@ public class NotesListFragment extends Fragment {
         removeValuesThread.start();
     }
 
+    private void startNoteActivity(NotesListItem item) {
+        Intent intent = new Intent(getActivity(), NoteActivity.class);
+        intent.putExtra(NOTES_EXTRA_NOTES_LIST, item);
+        startActivity(intent);
+    }
+
     private void updateUI() {
         NotesRecyclerViewAdapter notesAdapter = new NotesRecyclerViewAdapter(getContext(), listItems) {
             @Override
             public void onRemoveItem(long itemId) {
                 removeValues(itemId);
             }
+
+            @Override
+            public void onClickItem(NotesListItem item) {
+                startNoteActivity(item);
+            }
         };
         LinearLayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(notesAdapter);
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getContext(), recyclerView,
-                new RecyclerItemClickListener.OnItemClickListener() {
-
-                    @Override
-                    public void onItemClick(View view, int position) {
-                        NotesListItem listItem = listItems.get(position);
-                        Intent intent = new Intent(getActivity(), NoteActivity.class);
-                        intent.putExtra(NOTES_EXTRA_NOTES_LIST, listItem);
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void onLongItemClick(View view, int position) {}
-                })
-        );
         swipeRefreshLayout.setRefreshing(false);
     }
 }

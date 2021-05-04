@@ -26,6 +26,7 @@ public abstract class NotesRecyclerViewAdapter extends RecyclerView.Adapter<Note
     }
 
     public abstract void onRemoveItem(long itemId);
+    public abstract void onClickItem(NotesListItem item);
 
     @NonNull
     @Override
@@ -43,6 +44,7 @@ public abstract class NotesRecyclerViewAdapter extends RecyclerView.Adapter<Note
             holder.holderFieldDatetime.setText(listItem.getDatetime());
         }
         holder.holderRemoveButton.setOnClickListener(v -> onRemoveItem(listItem.getId()));
+        holder.itemView.setOnClickListener(v -> onClickItem(listItem));
     }
 
     @Override
