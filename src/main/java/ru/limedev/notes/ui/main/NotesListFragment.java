@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import ru.limedev.notes.NoteActivity;
 import ru.limedev.notes.R;
-import ru.limedev.notes.model.beans.NotesListItem;
+import ru.limedev.notes.model.parcels.NotesListItem;
 import ru.limedev.notes.model.db.NoteDbManager;
 
 import static ru.limedev.notes.model.Constants.NOTES_EXTRA_NOTES_LIST;

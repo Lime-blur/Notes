@@ -9,7 +9,7 @@ import android.provider.BaseColumns;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.limedev.notes.model.beans.NotesListItem;
+import ru.limedev.notes.model.parcels.NotesListItem;
 
 import static ru.limedev.notes.model.Constants.DB_RETURN_ERROR;
 import static ru.limedev.notes.model.db.NoteReaderContract.NoteEntry;

@@ -18,4 +18,5 @@ public final class Constants {
 
     public static final long DB_RETURN_ERROR = -1;
     public static final int UNKNOWN_INT_VALUE = -1;
+    public static final double UNKNOWN_NUMBER_VALUE = -99999999.9;
 }

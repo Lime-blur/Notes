@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ru.limedev.notes.R;
-import ru.limedev.notes.model.beans.NotesListItem;
+import ru.limedev.notes.model.parcels.NotesListItem;
 
 public abstract class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecyclerViewAdapter.ViewHolder> {
 

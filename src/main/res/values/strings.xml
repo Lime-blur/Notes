@@ -9,4 +9,7 @@
     <string name="time">Time</string>
     <string name="x">X</string>
     <string name="note_list_geo">noteListGeo</string>
+    <string name="activity_note_open_map">activityNoteOpenMap</string>
+    <string name="maps_api_key"></string>
+    <string name="attach_a_place">Attach a place</string>
 </resources>

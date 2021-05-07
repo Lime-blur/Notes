@@ -1,9 +1,11 @@
-package ru.limedev.notes.model.beans;
+package ru.limedev.notes.model.parcels;
 
-import java.io.Serializable;
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Objects;
 
-public class NotesListItem implements Serializable {
+public class NotesListItem implements Parcelable {
 
     private final long id;
     private String name;
@@ -25,6 +27,26 @@ public class NotesListItem implements Serializable {
         this.ltd = ltd;
         this.lgd = lgd;
     }
+
+    public static final Creator<NotesListItem> CREATOR = new Creator<NotesListItem>() {
+        @Override
+        public NotesListItem createFromParcel(Parcel source) {
+            long id = source.readLong();
+            String name = source.readString();
+            String text = source.readString();
+            String date = source.readString();
+            String time = source.readString();
+            int notificationId = source.readInt();
+            double ltd = source.readDouble();
+            double lgd = source.readDouble();
+            return new NotesListItem(id, name, text, date, time, notificationId, ltd, lgd);
+        }
+
+        @Override
+        public NotesListItem[] newArray(int size) {
+            return new NotesListItem[size];
+        }
+    };
 
     public long getId() {
         return id;
@@ -84,6 +106,23 @@ public class NotesListItem implements Serializable {
 
     public String getDatetime() {
         return getDate() + " " + getTime();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(text);
+        dest.writeString(date);
+        dest.writeString(time);
+        dest.writeInt(notificationId);
+        dest.writeDouble(ltd);
+        dest.writeDouble(lgd);
     }
 
     @Override
